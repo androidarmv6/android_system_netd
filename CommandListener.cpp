@@ -845,6 +845,7 @@ int CommandListener::SoftapCmd::runCommand(SocketClient *cli,
         rc = sSoftapCtrl->stopSoftap();
     } else if (!strcmp(argv[1], "fwreload")) {
         rc = sSoftapCtrl->fwReloadSoftap(argc, argv);
+#ifndef WIFI_DRIVER_LOADER_REUSE
     } else if (!strcmp(argv[1], "clients")) {
         rc = sSoftapCtrl->clientsSoftap(&retbuf);
         if (!rc) {
@@ -852,6 +853,7 @@ int CommandListener::SoftapCmd::runCommand(SocketClient *cli,
             free(retbuf);
             return 0;
         }
+#endif
     } else if (!strcmp(argv[1], "status")) {
         asprintf(&retbuf, "Softap service %s",
                  (sSoftapCtrl->isSoftapStarted() ? "started" : "stopped"));

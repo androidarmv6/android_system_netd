@@ -37,13 +37,25 @@ LOCAL_C_INCLUDES := $(KERNEL_HEADERS) \
 
 LOCAL_CFLAGS := -Werror=format
 
+ifdef WIFI_DRIVER_FW_PATH_STA
+  LOCAL_CFLAGS += -DWIFI_DRIVER_FW_PATH_STA=\"$(WIFI_DRIVER_FW_PATH_STA)\"
+endif
+ifdef WIFI_DRIVER_FW_PATH_AP
+  LOCAL_CFLAGS += -DWIFI_DRIVER_FW_PATH_AP=\"$(WIFI_DRIVER_FW_PATH_AP)\"
+endif
+
 LOCAL_SHARED_LIBRARIES := libstlport libsysutils libcutils libnetutils \
                           libcrypto libhardware_legacy libmdnssd libdl
 
 ifdef USES_TI_MAC80211
   LOCAL_SRC_FILES += SoftapControllerTI.cpp
 else
-  LOCAL_SRC_FILES += SoftapController.cpp
+  ifeq ($(WIFI_DRIVER_LOADER_REUSE),true)
+    LOCAL_SRC_FILES += SoftapControllerReloadReuse.cpp
+    LOCAL_CFLAGS += -DWIFI_DRIVER_LOADER_REUSE
+  else
+    LOCAL_SRC_FILES += SoftapController.cpp
+  endif
 endif
 
 
