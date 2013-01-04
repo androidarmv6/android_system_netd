@@ -101,6 +101,7 @@ int NetlinkManager::start() {
         return -1;
     }
 
+#ifndef DISABLE_BINARY_NETLINK
     if ((mRouteHandler = setupSocket(&mRouteSock, NETLINK_ROUTE, RTMGRP_LINK,
          NetlinkListener::NETLINK_FORMAT_BINARY)) == NULL) {
         return -1;
@@ -111,7 +112,7 @@ int NetlinkManager::start() {
         ALOGE("Unable to open quota2 logging socket");
         // TODO: return -1 once the emulator gets a new kernel.
     }
-
+#endif
     return 0;
 }
 
