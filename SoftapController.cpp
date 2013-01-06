@@ -228,7 +228,7 @@ int SoftapController::setSoftap(int argc, char *argv[]) {
     ALOGV("%s", wbuf);
 
     if (argc > 4) {
-        if (!strcmp(argv[4], "wpa")) {
+        if (!strcmp(argv[4], "wpa-psk")) {
             generatePsk(ssid, argv[5], psk_str);
             asprintf(&fbuf, "%swpa=1\nwpa_pairwise=TKIP CCMP\nwpa_psk=%s\n", wbuf, psk_str);
         } else if (!strcmp(argv[4], "wpa2-psk")) {

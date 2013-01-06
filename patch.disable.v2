@@ -1,0 +1,52 @@
+From 94af01fd89611e98259be8bd68f96ff62edd9f71 Mon Sep 17 00:00:00 2001
+From: Pavel Kirpichyov <pavel.kirpichyov@gmail.com>
+Date: Fri, 4 Jan 2013 20:47:02 +0400
+Subject: [PATCH] Allow to disable additional binary netlink events
+
+This event's only spamming to logcat for legacy devices, that can reduce perfomange
+
+Change-Id: Ifd74ae7f8a39de2b9ce5a366bd1b497870054f87
+---
+ Android.mk         |    4 ++++
+ NetlinkManager.cpp |    3 ++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Android.mk b/Android.mk
+index 857d963..f592ca2 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -71,6 +71,10 @@ ifeq ($(BOARD_WLAN_NO_FWRELOAD),true)
+   LOCAL_CFLAGS += -DWLAN_NO_FWRELOAD
+ endif
+ 
++ifeq ($(BOARD_DISABLE_BINARY_NETLINK),true)
++  LOCAL_CFLAGS += -DDISABLE_BINARY_NETLINK
++endif
++
+ include $(BUILD_EXECUTABLE)
+ 
+ include $(CLEAR_VARS)
+diff --git a/NetlinkManager.cpp b/NetlinkManager.cpp
+index 8e2bc69..0f62de4 100644
+--- a/NetlinkManager.cpp
++++ b/NetlinkManager.cpp
+@@ -101,6 +101,7 @@ int NetlinkManager::start() {
+         return -1;
+     }
+ 
++#ifndef DISABLE_BINARY_NETLINK
+     if ((mRouteHandler = setupSocket(&mRouteSock, NETLINK_ROUTE, RTMGRP_LINK,
+          NetlinkListener::NETLINK_FORMAT_BINARY)) == NULL) {
+         return -1;
+@@ -111,7 +112,7 @@ int NetlinkManager::start() {
+         ALOGE("Unable to open quota2 logging socket");
+         // TODO: return -1 once the emulator gets a new kernel.
+     }
+-
++#endif
+     return 0;
+ }
+ 
+-- 
+1.7.10.4
+
