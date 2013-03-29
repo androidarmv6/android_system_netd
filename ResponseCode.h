@@ -34,6 +34,9 @@ public:
     static const int CommandOkay               = 200;
     static const int TetherStatusResult        = 210;
     static const int IpFwdStatusResult         = 211;
+#ifdef HAVE_BLUETOOTH_BLUEZ
+    static const int PanStatusResult           = 212;
+#endif
     static const int InterfaceGetCfgResult     = 213;
     static const int SoftapStatusResult        = 214;
     static const int UsbRNDISStatusResult      = 215;

@@ -23,6 +23,9 @@
 #include "TetherController.h"
 #include "NatController.h"
 #include "PppController.h"
+#ifdef HAVE_BLUETOOTH_BLUEZ
+#include "PanController.h"
+#endif
 #include "SoftapController.h"
 #include "BandwidthController.h"
 #include "IdletimerController.h"
@@ -35,6 +38,9 @@ class CommandListener : public FrameworkListener {
     static TetherController *sTetherCtrl;
     static NatController *sNatCtrl;
     static PppController *sPppCtrl;
+#ifdef HAVE_BLUETOOTH_BLUEZ
+    static PanController *sPanCtrl;
+#endif
     static SoftapController *sSoftapCtrl;
     static BandwidthController *sBandwidthCtrl;
     static IdletimerController *sIdletimerCtrl;
@@ -101,7 +107,14 @@ private:
         virtual ~PppdCmd() {}
         int runCommand(SocketClient *c, int argc, char ** argv);
     };
-
+#ifdef HAVE_BLUETOOTH_BLUEZ
+    class PanCmd : public NetdCommand {
+    public:
+        PanCmd();
+        virtual ~PanCmd() {}
+        int runCommand(SocketClient *c, int argc, char ** argv);
+    };
+#endif
     class BandwidthControlCmd : public NetdCommand {
     public:
         BandwidthControlCmd();
