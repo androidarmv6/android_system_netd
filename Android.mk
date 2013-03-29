@@ -2,19 +2,28 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 
+ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+  LOCAL_CFLAGS += -DHAVE_BLUETOOTH_BLUEZ
+endif
+
 LOCAL_SRC_FILES:=                                      \
                   BandwidthController.cpp              \
                   CommandListener.cpp                  \
                   DnsProxyListener.cpp                 \
+                  MDnsSdListener.cpp                   \
                   FirewallController.cpp               \
                   IdletimerController.cpp              \
                   InterfaceController.cpp              \
-                  MDnsSdListener.cpp                   \
                   NatController.cpp                    \
                   NetdCommand.cpp                      \
                   NetdConstants.cpp                    \
                   NetlinkHandler.cpp                   \
-                  NetlinkManager.cpp                   \
+                  NetlinkManager.cpp
+ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+LOCAL_SRC_FILES+=                                      \
+                  PanController.cpp
+endif
+LOCAL_SRC_FILES+=                                      \
                   PppController.cpp                    \
                   ResolverController.cpp               \
                   SecondaryTableController.cpp         \
@@ -27,7 +36,12 @@ LOCAL_SRC_FILES:=                                      \
 
 LOCAL_MODULE:= netd
 
-LOCAL_C_INCLUDES := $(KERNEL_HEADERS) \
+LOCAL_C_INCLUDES := $(KERNEL_HEADERS)
+ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+LOCAL_C_INCLUDES += \
+                    $(LOCAL_PATH)/../bluetooth/bluedroid/include \
+                    $(LOCAL_PATH)/../bluetooth/bluez-clean-headers
+endif
                     external/mdnsresponder/mDNSShared \
                     external/openssl/include \
                     external/stlport/stlport \
@@ -60,6 +74,10 @@ ifeq ($(BOARD_HAVE_LEGACY_HOSTAPD),true)
   LOCAL_CFLAGS += -DHAVE_LEGACY_HOSTAPD
 endif
 
+ifeq ($(BOARD_HAVE_BLUETOOTH_BLUEZ),true)
+  LOCAL_SHARED_LIBRARIES := $(LOCAL_SHARED_LIBRARIES) libbluedroid
+  LOCAL_CFLAGS += -DHAVE_BLUETOOTH
+endif
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_SHARED_LIBRARIES := $(LOCAL_SHARED_LIBRARIES) libbluedroid
   LOCAL_CFLAGS += -DHAVE_BLUETOOTH
