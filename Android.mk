@@ -64,6 +64,10 @@ ifeq ($(BOARD_WLAN_NO_FWRELOAD),true)
   LOCAL_CFLAGS += -DWLAN_NO_FWRELOAD
 endif
 
+ifeq ($(WIFI_DRIVER_HAS_LGE_SOFTAP),true)
+  LOCAL_CFLAGS += -DLGE_SOFTAP
+endif
+
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
