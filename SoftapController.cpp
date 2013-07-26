@@ -233,7 +233,7 @@ int SoftapController::setSoftap(int argc, char *argv[]) {
             asprintf(&fbuf, "%swpa=1\nwpa_pairwise=TKIP CCMP\nwpa_psk=%s\n", wbuf, psk_str);
         } else if (!strcmp(argv[4], "wpa2-psk")) {
             generatePsk(ssid, argv[5], psk_str);
-            asprintf(&fbuf, "%swpa=2\nwpa_pairwise=CCMP\nwpa_psk=%s\n", wbuf, psk_str);
+            asprintf(&fbuf, "%swpa=2\nrsn_pairwise=CCMP\nwpa_psk=%s\n", wbuf, psk_str);
         } else if (!strcmp(argv[4], "open")) {
             asprintf(&fbuf, "%s", wbuf);
         } else {
