@@ -32,9 +32,6 @@ class SoftapController {
     pid_t mPid;
     int mSock;
 
-    int addParam(int pos, const char *cmd, const char *arg);
-    int setCommand(char *iface, const char *fname, unsigned buflen=0);
-
 public:
     SoftapController();
     virtual ~SoftapController();
