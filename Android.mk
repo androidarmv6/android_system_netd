@@ -65,6 +65,14 @@ ifeq ($(BOARD_HAS_QCOM_WLAN_SDK), true)
   LOCAL_C_INCLUDES += $(LOCAL_PATH)/../qcom/softap/sdk/
 endif
 
+ifeq ($(BOARD_HAVE_LEGACY_HOSTAPD),true)
+  LOCAL_CFLAGS += -DHAVE_LEGACY_HOSTAPD
+endif
+
+ifeq ($(BOARD_WLAN_NO_FWRELOAD),true)
+  LOCAL_CFLAGS += -DWLAN_NO_FWRELOAD
+endif
+
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
