@@ -129,7 +129,11 @@ int SoftapController::setSoftap(int argc, char *argv[]) {
 
 
     asprintf(&wbuf, "interface=%s\ndriver=" HOSTAPD_DRIVER_NAME "\nctrl_interface="
+#ifdef HAVE_LEGACY_HOSTAPD
+            "/data/misc/wifi/hostapd\nssid=%s\nchannel=6\n"
+#else
             "/data/misc/wifi/hostapd\nssid=%s\nchannel=6\nieee80211n=1\n"
+#endif
             "hw_mode=g\n",
             argv[2], argv[3]);
 
@@ -189,6 +193,9 @@ int SoftapController::setSoftap(int argc, char *argv[]) {
  */
 int SoftapController::fwReloadSoftap(int argc, char *argv[])
 {
+#ifdef WLAN_NO_FWRELOAD
+    return 0;
+#endif
     int i = 0;
     char *fwpath = NULL;
 
