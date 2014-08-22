@@ -19,6 +19,7 @@ LOCAL_SRC_FILES:=                                      \
                   PppController.cpp                    \
                   ResolverController.cpp               \
                   SecondaryTableController.cpp         \
+                  SoftapController.cpp                 \
                   TetherController.cpp                 \
                   oem_iptables_hook.cpp                \
                   UidMarkMap.cpp                       \
@@ -37,15 +38,13 @@ LOCAL_C_INCLUDES := $(KERNEL_HEADERS) \
 
 LOCAL_CFLAGS := -Werror=format
 
+ifdef USES_TI_MAC80211
+LOCAL_CFLAGS += -DSINGLE_WIFI_FW
+endif
+
 LOCAL_SHARED_LIBRARIES := libstlport libsysutils liblog libcutils libnetutils \
                           libcrypto libhardware_legacy libmdnssd libdl \
                           liblogwrap
-
-ifdef USES_TI_MAC80211
-  LOCAL_SRC_FILES += SoftapControllerTI.cpp
-else
-  LOCAL_SRC_FILES += SoftapController.cpp
-endif
 
 ifneq ($(BOARD_HOSTAPD_DRIVER),)
   LOCAL_CFLAGS += -DHAVE_HOSTAPD
